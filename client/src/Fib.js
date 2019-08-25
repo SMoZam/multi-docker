@@ -15,7 +15,6 @@ class Fib extends Component {
 
   async fetchValues() {
     const values = await axios.get('/api/values/current');
-    console.log("values", values)
     this.setState({ values: values.data });
   }
 
@@ -54,7 +53,6 @@ class Fib extends Component {
   }
 
   render() {
-    console.log(this.state.values)
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -71,8 +69,6 @@ class Fib extends Component {
 
         <h3>Calculated Values:</h3>
         {this.renderValues()}
-
-
       </div>
     );
   }

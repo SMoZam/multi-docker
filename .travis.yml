@@ -3,19 +3,22 @@ services:
   - docker
 
 before_install:
-  - docker build -t mozam/react-test -f ./client/Dockerfile.dev .
+  - docker build -t mozam/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true mozam/react-test npm run test -- --coverage
+  - docker run mozam/react-test npm test -- --coverage
 
 after_success:
-  - docker build - t mozam/multi-client -f ./client/Dockerfile ./client
-  - docker build - t mozam/multi-nginx -f ./nginx/Dockerfile ./nginx
-  - docker build - t mozam/multi-server -f ./server/Dockerfile ./server
-  - docker build - t mozam/multi-worker -f ./worker/Dockerfile ./worker
-  #Log in to the docker CLI
+  - docker build -t mozam/multi-client ./client
+  - docker build -t mozam/multi-nginx ./nginx
+  - docker build -t mozam/multi-server ./server
+  - docker build -t mozam/multi-worker ./worker
+  # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push docker.io/mozam/multi-client
+  # Take those images and push them to docker hub
+  - docker push mozam/multi-client
   - docker push mozam/multi-nginx
   - docker push mozam/multi-server
   - docker push mozam/multi-worker
+
+
